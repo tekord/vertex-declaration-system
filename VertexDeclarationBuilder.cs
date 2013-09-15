@@ -68,6 +68,19 @@ namespace Tekord.VertexDeclarationSystem {
 		}
 		
 		/// <summary>
+		/// 
+		/// </summary>
+		public void RecalculateOffsets() {
+			short offset = 0;
+			
+			foreach (var i in _elements) {
+				i.Offset = offset;
+				
+				offset += (short)i.GetFormatSize();
+			}
+		}
+		
+		/// <summary>
 		/// Gets the array of vertex elements that make up the vertex declaration.
 		/// </summary>
 		/// <returns></returns>

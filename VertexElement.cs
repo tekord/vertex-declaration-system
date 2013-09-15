@@ -76,8 +76,9 @@ namespace Tekord.VertexDeclarationSystem {
 		/// Gets the offset into the buffer where this element starts.
 		/// </summary>
 		/// <value>The offset in the buffer that this element starts at.</value>
-		public int Offset {
+		public short Offset {
 			get { return _offset; }
+			internal set { _offset = value; }
 		}
 
 		/// <summary>
