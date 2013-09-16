@@ -1,7 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace Tekord.VertexDeclarationSystem {
+	/// <summary>
+	/// 
+	/// </summary>
+	public interface IVertexFormat {
+	}
+	
 	/// <summary>
 	/// Represents the format of a set of vertex inputs, which can be issued to the rendering API.
 	/// </summary>
@@ -57,6 +64,48 @@ namespace Tekord.VertexDeclarationSystem {
 		/// <returns></returns>
 		public VertexElement FindElementByUsage(string usage, short index = 0) {
 			return VertexElement.FindByUsage(_elements, usage, index);
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="usage"></param>
+		/// <param name="dstArray"></param>
+		/// <param name="elements"></param>
+		/// <returns></returns>
+		public VertexDeclaration UpdateData<TVertex, TElement>(string usage, TVertex[] dstArray, TElement[] elements)
+			where TVertex : struct, IVertexFormat
+		{
+			var element = FindElementByUsage(usage);
+			var offset = element.Offset;
+			
+			var dstHandle = GCHandle.Alloc(dstArray, GCHandleType.Pinned);
+			IntPtr dstAddress = dstHandle.AddrOfPinnedObject();
+			
+			var dataHandle = GCHandle.Alloc(elements, GCHandleType.Pinned);
+			IntPtr dataAddress = dataHandle.AddrOfPinnedObject();
+			
+			var stepSize = element.GetFormatSize();
+			var count = Marshal.SizeOf(elements.GetType().GetElementType()) * elements.Length;
+			var vertexIndex = 0;
+			
+			for (int i = 0, strideCounter = 0; i < count; ++i) {
+				var v = Marshal.ReadByte(dataAddress, i);
+				
+				Marshal.WriteByte(dstAddress, (vertexIndex * _stride) + offset + strideCounter, v);
+				
+				++strideCounter;
+				
+				if (strideCounter == stepSize) {
+					strideCounter = 0;
+					++vertexIndex;
+				}
+			}
+			
+			dataHandle.Free();
+			dstHandle.Free();
+			
+			return this;
 		}
 		
 		/// <summary>
