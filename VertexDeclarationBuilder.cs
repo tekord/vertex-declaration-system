@@ -93,7 +93,15 @@ namespace Tekord.VertexDeclarationSystem {
 		/// </summary>
 		/// <returns></returns>
 		public VertexDeclaration Build() {
-			return new VertexDeclaration(GetVertexElements());
+			var elements = GetVertexElements();
+			VertexDeclaration result = null;
+			
+			if (elements.Length > 0)
+				result = new VertexDeclaration(elements);
+			
+			this.Clear();
+			
+			return result;
 		}
 	}
 }
