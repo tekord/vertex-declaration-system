@@ -40,7 +40,7 @@ set first sets index to 0, and the second set to 1.
 
 ...
 
-If you remove some elements then call `RecalculateOffsets()` method of your VertexDeclarationBuilder 
+If you remove some elements then call `RecalculateOffsets()` method of your `VertexDeclarationBuilder` 
 instance.
 
 ## Examples
@@ -80,3 +80,46 @@ Result declaration:
 	  [VertexElement Usage=TEXTURE_COORDINATE, Format=Vector2, Offset=12, UsageIndex=0]
 	  [VertexElement Usage=TEXTURE_COORDINATE, Format=Vector2, Offset=20, UsageIndex=1]
 	]]
+	
+## How to Use
+
+First of all define vertex declaration. For example we need vertex containing position (XYZ) and diffuse color:
+
+	var builder = new VertexDeclarationBuilder();
+	builder.AddElement(VertexElementUsages.POSITION, VertexElementFormat.Vector3);
+	builder.AddElement(VertexElementUsages.DIFFUSE_COLOR, VertexElementFormat.Vector4);
+	
+	var declaration = builder.Build();
+	
+Now we need values to construct vertices. Let's define 3 vertices (triangle):
+
+	// 3 values per vertex (x, y, z)
+	float[] positions = new float[] {
+		-0.5, 0, 0,
+		 0.5, 0, 0,
+		 0,   1, 0
+	};
+	
+	// 4 values per vertex (r, g, b, a)
+	float[] diffuseColors = new float[] {
+		1.0f, 0.0f, 0.0f, 1.0f, // red
+		0.0f, 1.0f, 0.0f, 1.0f, // green
+		0.0f, 0.0f, 1.0f, 1.0f // blue
+	};
+	
+Declare structure (note the structure MUST provide IVertexFormat interface):
+
+	public struct Vertex_Position3Color4 : IVertexFormat {
+		public Vector3 Position;
+		public Vector4 DiffuseColor;
+	};
+	
+Now you can create the array of vertices and fill it:
+
+	Vertex_Position3Color4[] vertices = new Vertex_Position3Color4[3];
+	
+	declaration
+		.UpdateData(VertexElementUsages.POSITION, vertices, positions)
+		.UpdateData(VertexElementUsages.DIFFUSE_COLOR, vertices, diffuseColors);
+		
+Done.
