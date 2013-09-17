@@ -14,7 +14,7 @@ namespace Tekord.VertexDeclarationSystem {
 		/// </summary>
 		/// <param name="customType"></param>
 		public VertexDeclarationBuilder(Type customType = null) {
-			if (!customType.IsAssignableFrom(typeof(VertexDeclaration)))
+			if (customType != null && !customType.IsAssignableFrom(typeof(VertexDeclaration)))
 				throw new ArgumentException("customType must be assignable from VertexDeclaration class.", "customType");
 				
 			_elements = new List<VertexElement>();
