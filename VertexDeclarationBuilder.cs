@@ -7,12 +7,18 @@ namespace Tekord.VertexDeclarationSystem {
 	/// </summary>
 	public class VertexDeclarationBuilder {
 		protected List<VertexElement> _elements;
+		protected Type _customType;
 
 		/// <summary>
 		/// Initializes a new instance.
 		/// </summary>
-		public VertexDeclarationBuilder() {
+		/// <param name="customType"></param>
+		public VertexDeclarationBuilder(Type customType = null) {
+			if (!customType.IsAssignableFrom(typeof(VertexDeclaration)))
+				throw new ArgumentException("customType must be assignable from VertexDeclaration class.", "customType");
+				
 			_elements = new List<VertexElement>();
+			_customType = customType;
 		}
 		
 		/// <summary>
@@ -96,8 +102,14 @@ namespace Tekord.VertexDeclarationSystem {
 			var elements = GetVertexElements();
 			VertexDeclaration result = null;
 			
-			if (elements.Length > 0)
-				result = new VertexDeclaration(elements);
+			if (elements.Length > 0) {
+				if (_customType == null) {
+					result = new VertexDeclaration(elements);
+				}
+				else {
+					result = (VertexDeclaration)Activator.CreateInstance(_customType, new object[] {elements});
+				}
+			}
 			
 			this.Clear();
 			
