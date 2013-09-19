@@ -4,7 +4,7 @@ namespace Tekord.VertexDeclarationSystem {
 	/// <summary>
 	/// 
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
 	public sealed class VertexElementAttribute : Attribute {
 		/// <summary>
 		/// 
@@ -37,7 +37,7 @@ namespace Tekord.VertexDeclarationSystem {
 		/// <summary>
 		/// 
 		/// </summary>
-		public int UsageIndex {
+		public short UsageIndex {
 			get; set;
 		}
 		
@@ -47,7 +47,7 @@ namespace Tekord.VertexDeclarationSystem {
 		/// <param name="usage"></param>
 		/// <param name="format"></param>
 		/// <param name="usageIndex"></param>
-		public VertexElementAttribute(string usage, VertexElementFormat format, ushort usageIndex = 0) {
+		public VertexElementAttribute(string usage, VertexElementFormat format, short usageIndex = 0) {
 			Usage = usage;
 			Format = format;
 			UsageIndex = usageIndex;

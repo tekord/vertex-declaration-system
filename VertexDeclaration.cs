@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace Tekord.VertexDeclarationSystem {
 	/// <summary>
@@ -127,5 +128,57 @@ namespace Tekord.VertexDeclarationSystem {
 			
 			return sb.ToString();
 		}
+		
+		#region Register and Get
+		
+		private static Dictionary<Type, VertexDeclaration> _cachedVertexDeclarations = new Dictionary<Type, VertexDeclaration>();
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		public static void Register<T>()
+			where T : struct, IVertexFormat 
+		{
+			var type = typeof(T);
+			
+			if (_cachedVertexDeclarations.ContainsKey(type))
+				return; // Do nothing if already registered
+			
+			var builder = new VertexDeclarationBuilder();
+			
+			FieldInfo[] fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+			
+			foreach (var currentField in fields) {
+				Console.WriteLine("Processing '{0}'", currentField.Name);
+				
+				var attributes = (VertexElementAttribute[])currentField.GetCustomAttributes(typeof(VertexElementAttribute), false);
+				
+				if (attributes.Length == 1) {
+					var attribute = attributes[0];
+					
+					builder.AddElement(attribute.Usage, attribute.Format, (short)attribute.UsageIndex);
+				}
+			}
+			
+			var declaration = builder.Build();
+			
+			_cachedVertexDeclarations[type] = declaration;
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public static VertexDeclaration Get<T>()
+			where T : struct, IVertexFormat
+		{
+			VertexDeclaration result;
+			
+			_cachedVertexDeclarations.TryGetValue(typeof(T), out result);
+			
+			return result;
+		}
+		
+		#endregion
 	}
 }
