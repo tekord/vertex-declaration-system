@@ -149,8 +149,6 @@ namespace Tekord.VertexDeclarationSystem {
 			FieldInfo[] fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 			
 			foreach (var currentField in fields) {
-				Console.WriteLine("Processing '{0}'", currentField.Name);
-				
 				var attributes = (VertexElementAttribute[])currentField.GetCustomAttributes(typeof(VertexElementAttribute), false);
 				
 				if (attributes.Length == 1) {
@@ -173,6 +171,10 @@ namespace Tekord.VertexDeclarationSystem {
 			where T : struct, IVertexFormat
 		{
 			VertexDeclaration result;
+			
+			if (!_cachedVertexDeclarations.ContainsKey(typeof(T))) {
+				Register<T>();
+			}
 			
 			_cachedVertexDeclarations.TryGetValue(typeof(T), out result);
 			
