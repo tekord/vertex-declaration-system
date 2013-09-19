@@ -23,9 +23,8 @@
     <SourceAnalysisOverrideSettingsFile>C:\Users\Preston\AppData\Roaming\ICSharpCode/SharpDevelop4\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <BaseAddress>4194304</BaseAddress>
-    <Prefer32Bit>False</Prefer32Bit>
     <RegisterForComInterop>False</RegisterForComInterop>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <FileAlignment>4096</FileAlignment>
@@ -62,7 +61,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VertexDeclaration.cs" />
     <Compile Include="VertexDeclarationBuilder.cs" />
+    <Compile Include="VertexDeclarationManager.cs" />
     <Compile Include="VertexElement.cs" />
+    <Compile Include="VertexElementAttribute.cs" />
+    <Compile Include="VertexElementFormat.cs" />
     <Compile Include="VertexElementHelper.cs" />
   </ItemGroup>
   <ItemGroup>
