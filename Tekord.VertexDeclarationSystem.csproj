@@ -61,7 +61,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VertexDeclaration.cs" />
     <Compile Include="VertexDeclarationBuilder.cs" />
-    <Compile Include="VertexDeclarationManager.cs" />
     <Compile Include="VertexElement.cs" />
     <Compile Include="VertexElementAttribute.cs" />
     <Compile Include="VertexElementFormat.cs" />
