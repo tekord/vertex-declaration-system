@@ -65,6 +65,7 @@
     <Compile Include="VertexElementAttribute.cs" />
     <Compile Include="VertexElementFormat.cs" />
     <Compile Include="VertexElementHelper.cs" />
+    <Compile Include="VertexElementUsages.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
