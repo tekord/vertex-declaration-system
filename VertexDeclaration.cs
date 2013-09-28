@@ -71,6 +71,21 @@ namespace Tekord.VertexDeclarationSystem {
 		/// 
 		/// </summary>
 		/// <param name="usage"></param>
+		/// <param name="usageIndex"></param>
+		/// <returns></returns>
+		public short GetElementOffset(string usage, short usageIndex = 0) {
+			var element = FindElementByUsage(usage, usageIndex);
+			
+			if (element != null)
+				return element.Offset;
+			
+			return -1;
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="usage"></param>
 		/// <param name="dstArray"></param>
 		/// <param name="elements"></param>
 		/// <returns></returns>
