@@ -89,7 +89,7 @@ namespace Tekord.VertexDeclarationSystem {
 		/// <param name="dstArray"></param>
 		/// <param name="elements"></param>
 		/// <returns></returns>
-		public VertexDeclaration UpdateData<TVertex, TElement>(string usage, TVertex[] dstArray, TElement[] elements)
+		public VertexDeclaration UpdateData<TVertex, TElement>(string usage, TVertex[] dstArray, IList<TElement> elements)
 			where TVertex : struct, IVertexFormat
 		{
 			var element = FindElementByUsage(usage);
@@ -102,7 +102,7 @@ namespace Tekord.VertexDeclarationSystem {
 			IntPtr dataAddress = dataHandle.AddrOfPinnedObject();
 			
 			var stepSize = element.GetFormatSize();
-			var count = Marshal.SizeOf(elements.GetType().GetElementType()) * elements.Length;
+			var count = Marshal.SizeOf(elements.GetType().GetElementType()) * elements.Count;
 			var vertexIndex = 0;
 			
 			for (int i = 0, strideCounter = 0; i < count; ++i) {
