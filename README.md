@@ -6,7 +6,7 @@ contains to be used correctly, and each graphics API has slightly different ways
 This library allows you to describe your custom vertex structures by creating an array of vertex 
 elements that correspond to each of the data elements in your vertex structure. Each element 
 in the array contains information such as the data format, the intended usage, the offset into 
-structure in bytes, ect.
+structure in bytes, etc.
 
 ## Vertex Declaration
 
