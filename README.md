@@ -10,7 +10,7 @@ structure in bytes, etc.
 
 ## Vertex Declaration
 
-**Vertex Declaration** define the vertex inputs used to render the geometry. Declaration is made up of elements.
+**Vertex Declaration** defines the vertex inputs used to render the geometry. Declaration is made up of elements.
 
 **Vertex Element** specifies a single part of a vertex. Element provides the following fields:
 
@@ -36,113 +36,155 @@ set first sets index to 0, and the second set to 1.
 
 First step is to declare your vertex structure and describe elements:
 
-	/// <summary>
-	/// Represents a standard vertex format.
-	/// </summary>
-	[System.Runtime.InteropServices.StructLayout(
-		System.Runtime.InteropServices.LayoutKind.Sequential,
-		Pack = 1)]
-	public struct Vertex_STANDARD : IVertexFormat {
-		/// <summary>
-		/// Position in 3D-space.
-		/// </summary>
-		[VertexElementAttribute(VertexElementUsages.POSITION_XYZ, VertexElementFormat.Vector3)]
-		public Vector3 Position;
-		
-		/// <summary>
-		/// Normal vector.
-		/// </summary>
-		[VertexElementAttribute(VertexElementUsages.NORMAL, VertexElementFormat.Vector3)]
-		public Vector3 Normal;
-		
-		/// <summary>
-		/// Diffuse color.
-		/// </summary>
-		[VertexElementAttribute(VertexElementUsages.COLOR, VertexElementFormat.Vector4)]
-		public Vector4 Color;
-		
-		/// <summary>
-		/// UV coordinates for 1st texture.
-		/// </summary>
-		[VertexElementAttribute(VertexElementUsages.TEXTURE_COORDINATE, VertexElementFormat.Vector2, 0)]
-		public Vector2 UV1;
-		
-		/// <summary>
-		/// UV coordinates for 2nd texture.
-		/// </summary>
-		[VertexElementAttribute(VertexElementUsages.TEXTURE_COORDINATE, VertexElementFormat.Vector2, 1)]
-		public Vector2 UV2;
-		
-		/// <summary>
-		/// Tangent vector.
-		/// </summary>
-		[VertexElementAttribute(VertexElementUsages.TANGENT, VertexElementFormat.Vector4)]
-		public Vector4 Tangent;
-	}
+
+```
+#!c#
+
+/// <summary>
+/// Represents a standard vertex format.
+/// </summary>
+[System.Runtime.InteropServices.StructLayout(
+    System.Runtime.InteropServices.LayoutKind.Sequential,
+    Pack = 1)]
+public struct Vertex_STANDARD : IVertexFormat {
+    /// <summary>
+    /// Position in 3D-space.
+    /// </summary>
+    [VertexElementAttribute(VertexElementUsages.POSITION_XYZ, VertexElementFormat.Vector3)]
+    public Vector3 Position;
+
+    /// <summary>
+    /// Normal vector.
+    /// </summary>
+    [VertexElementAttribute(VertexElementUsages.NORMAL, VertexElementFormat.Vector3)]
+    public Vector3 Normal;
+
+    /// <summary>
+    /// Diffuse color.
+    /// </summary>
+    [VertexElementAttribute(VertexElementUsages.COLOR, VertexElementFormat.Vector4)]
+    public Vector4 Color;
+
+    /// <summary>
+    /// UV coordinates for 1st texture.
+    /// </summary>
+    [VertexElementAttribute(VertexElementUsages.TEXTURE_COORDINATE, VertexElementFormat.Vector2, 0)]
+    public Vector2 UV1;
+
+    /// <summary>
+    /// UV coordinates for 2nd texture.
+    /// </summary>
+    [VertexElementAttribute(VertexElementUsages.TEXTURE_COORDINATE, VertexElementFormat.Vector2, 1)]
+    public Vector2 UV2;
+
+    /// <summary>
+    /// Tangent vector.
+    /// </summary>
+    [VertexElementAttribute(VertexElementUsages.TANGENT, VertexElementFormat.Vector4)]
+    public Vector4 Tangent;
+}
+```
 
 Note that element attributes of `UV1` and `UV2` have third argument: 0 and 1 correspondingly. We describe same usage for 
 this elements so we need to identify them by usage index.
 
 Next step is to build vertex declaration for the structure:
 
-	VertexDeclaration.Register<Vertex_STANDARD>();
-	
+```
+#!C#
+
+VertexDeclaration.Register<Vertex_STANDARD>();
+```
+
 Vertex declaration is built and stores inside of `VertexDeclaration` cache. To get `VertexDeclaration` 
 instance of your structure write:
 
-	var declaration = VertexDeclaration.Get<Vertex_STANDARD>();
+```
+#!c#
+
+var declaration = VertexDeclaration.Get<Vertex_STANDARD>();
+```
 	
 We need values to construct vertices. Let's define 3 vertices (triangle):
 
-	// 3 values per vertex (x, y, z)
-	float[] positions = new float[] {
-		-0.5f, 0.0f, 0.0f,
-		 0.5f, 0.0f, 0.0f,
-		 0.0f, 1.0f, 0.0f
-	};
-	
-	// 4 values per vertex (r, g, b, a)
-	float[] diffuseColors = new float[] {
-		1.0f, 0.0f, 0.0f, 1.0f, // red
-		0.0f, 1.0f, 0.0f, 1.0f, // green
-		0.0f, 0.0f, 1.0f, 1.0f // blue
-	};
-	
+```
+#!c#
+
+// 3 values per vertex (x, y, z)
+float[] positions = new float[] {
+	-0.5f, 0.0f, 0.0f,
+	 0.5f, 0.0f, 0.0f,
+	 0.0f, 1.0f, 0.0f
+};
+
+// 4 values per vertex (r, g, b, a)
+float[] diffuseColors = new float[] {
+	1.0f, 0.0f, 0.0f, 1.0f, // red
+	0.0f, 1.0f, 0.0f, 1.0f, // green
+	0.0f, 0.0f, 1.0f, 1.0f  // blue
+};
+```
+
 Now you can create the array of vertices and fill it:
 
-	Vertex_STANDARD[] vertices = new Vertex_STANDARD[3];
-	
-	// Getting declaration here if you have not already get it
-	var declaration = VertexDeclaration.Get<Vertex_STANDARD>();
-	
-	declaration
-		.UpdateData(VertexElementUsages.POSITION, vertices, positions)
-		.UpdateData(VertexElementUsages.DIFFUSE_COLOR, vertices, diffuseColors);
-		
+```
+#!c#
+
+
+Vertex_STANDARD[] vertices = new Vertex_STANDARD[3];
+
+// Getting declaration here if you have not already get it
+var declaration = VertexDeclaration.Get<Vertex_STANDARD>();
+
+declaration
+	.UpdateData(VertexElementUsages.POSITION, vertices, positions)
+	.UpdateData(VertexElementUsages.DIFFUSE_COLOR, vertices, diffuseColors);
+```
+
 Done.
 
 ## Custom Building
 
 You can build vertex declaration customly through the vertex declaration builder.
 
-	var builder = new VertexDeclarationBuilder();
+```
+#!c#
+
+var builder = new VertexDeclarationBuilder();
+```
 
 If you want to extend `VertexDeclaration` class and create instance of it through the builder then pass `customType` parameter to `VertexDeclarationBuilder`'s constructor:
 
-	var builder = new VertexDeclarationBuilder(typeof(MyCustomVertexDeclaration));
+```
+#!c#
+
+var builder = new VertexDeclarationBuilder(typeof(MyCustomVertexDeclaration));
+```
 
 Add some elements:
 
-	builder.AddElement(VertexElementUsages.POSITION, VertexElementFormat.Vector3);
-	builder.AddElement(VertexElementUsages.TANGENT, VertexElementFormat.Vector4);
+```
+#!c#
+
+builder.AddElement(VertexElementUsages.POSITION, VertexElementFormat.Vector3);
+builder.AddElement(VertexElementUsages.TANGENT, VertexElementFormat.Vector4);
+```
 
 Finally call `Build` method:
 
-	VertexDeclaration declaration = builder.Build();
+```
+#!c#
 
-To check the result in console do:
+VertexDeclaration declaration = builder.Build();
+```
 
-	Console.WriteLine(declaration.DumpElements());
+To check the result in console:
+
+```
+#!c#
+
+Console.WriteLine(declaration.DumpElements());
+```
 
 > Don't forget to call `RecalculateOffsets()` method after you remove some element(s) during the building.
 
@@ -150,13 +192,17 @@ To check the result in console do:
 
 Let's build declaration for vertex [position, normal, color]:
 
-	var builder = new VertexDeclarationBuilder();
-	builder.AddElement(VertexElementUsages.POSITION, VertexElementFormat.Vector3);
-	builder.AddElement(VertexElementUsages.NORMAL, VertexElementFormat.Vector3);
-	builder.AddElement(VertexElementUsages.COLOR, VertexElementFormat.Vector4);
-	
-	var declaration = builder.Build();
-	
+```
+#!c#
+
+var builder = new VertexDeclarationBuilder();
+builder.AddElement(VertexElementUsages.POSITION, VertexElementFormat.Vector3);
+builder.AddElement(VertexElementUsages.NORMAL, VertexElementFormat.Vector3);
+builder.AddElement(VertexElementUsages.COLOR, VertexElementFormat.Vector4);
+
+var declaration = builder.Build();
+```
+
 Result:
 
 	[VertexDeclaration Stride=40 Elements=[
@@ -166,16 +212,20 @@ Result:
 	]]
 
 Now let's build declaration for vertex with two color components [position, diffuse color, specular color]:
-	
-	var builder = new VertexDeclarationBuilder();
 
-	builder.AddElement(VertexElementUsages.POSITION, VertexElementFormat.Vector3);
-	// We use the same semantics with different index
-	builder.AddElement(VertexElementUsages.COLOR, VertexElementFormat.Vector4, 0);
-	builder.AddElement(VertexElementUsages.COLOR, VertexElementFormat.Vector4, 1);
-	
-	var declaration = builder.Build();
-	
+```
+#!c#
+
+var builder = new VertexDeclarationBuilder();
+
+builder.AddElement(VertexElementUsages.POSITION, VertexElementFormat.Vector3);
+// We use the same semantics with different index
+builder.AddElement(VertexElementUsages.COLOR, VertexElementFormat.Vector4, 0);
+builder.AddElement(VertexElementUsages.COLOR, VertexElementFormat.Vector4, 1);
+
+var declaration = builder.Build();
+```
+
 Result:
 
 	[VertexDeclaration Stride=28 Elements=[
